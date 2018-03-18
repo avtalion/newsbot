@@ -1,0 +1,26 @@
+ 2018-03-18 20:19:01,812 - INFO - Starting new HTTP connection (1): www.davar1.co.il
+ 2018-03-18 20:19:03,591 - INFO - Matched 68 items at davar1
+ 2018-03-18 20:19:03,592 - INFO - Starting new HTTP connection (1): www.davar1.co.il
+ 2018-03-18 20:19:04,229 - INFO - Starting new HTTP connection (1): www.davar1.co.il
+ 2018-03-18 20:19:04,756 - INFO - Starting new HTTP connection (1): www.davar1.co.il
+ 2018-03-18 20:19:05,038 - INFO - 
+first article: <a href="http://www.davar1.co.il/115873/">מדיניות העמידה מהצד</a>
+second article: <a href="http://www.davar1.co.il/115968/">
+<span class="label">דעות</span>למה הממשלה ממשיכה להנהיג חנק תקציבי? כי אף אחד בכנסת לא מתנגד</a>
+third article: <a href="http://www.davar1.co.il/116129/">פצוע קשה בעיר העתיקה</a>
+ 2018-03-18 20:19:05,045 - INFO - Starting new HTTPS connection (1): www.haaretz.co.il
+ 2018-03-18 20:19:05,947 - INFO - Starting new HTTPS connection (1): www.makorrishon.co.il
+ 2018-03-18 20:19:07,484 - INFO - Starting new HTTPS connection (1): www.themarker.com
+ 2018-03-18 20:19:15,378 - INFO - Starting new HTTP connection (1): www.davar1.co.il
+ 2018-03-18 20:19:17,813 - INFO - Matched 68 items at davar1
+ 2018-03-18 20:19:17,814 - INFO - Starting new HTTP connection (1): www.davar1.co.il
+ 2018-03-18 20:19:18,072 - INFO - Starting new HTTP connection (1): www.davar1.co.il
+ 2018-03-18 20:19:18,368 - INFO - Starting new HTTP connection (1): www.davar1.co.il
+ 2018-03-18 20:19:18,747 - INFO - 
+first article: <a href="http://www.davar1.co.il/115873/">מדיניות העמידה מהצד</a>
+second article: <a href="http://www.davar1.co.il/115968/">
+<span class="label">דעות</span>למה הממשלה ממשיכה להנהיג חנק תקציבי? כי אף אחד בכנסת לא מתנגד</a>
+third article: <a href="http://www.davar1.co.il/116129/">פצוע קשה בעיר העתיקה</a>
+ 2018-03-18 20:19:18,754 - INFO - Starting new HTTPS connection (1): www.haaretz.co.il
+ 2018-03-18 20:19:19,785 - INFO - Starting new HTTPS connection (1): www.makorrishon.co.il
+ 2018-03-18 20:19:21,949 - INFO - Starting new HTTPS connection (1): www.themarker.com
