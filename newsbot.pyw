@@ -30,12 +30,12 @@ while run:
             # gets the first three article pages
             davarfirst = requests.get(headlinelinks[0].get('href'))
             davarsecond = requests.get(headlinelinks[1].get('href'))
-            davarthird = requests.get(headlinelinks[2].get('href'))
+            davarthird = requests.get(headlinelinks[3].get('href'))
             logging.info('First article: %s' % headlinelinks[0].get('href'))
             logging.info('Second article: %s' % headlinelinks[1].get('href'))
             logging.info('Third article: %s' % headlinelinks[3].get('href'))
             # TODO: parse title and text from davarfirst
-
+            
             # TODO: parse title and text from davarsecond
 
             # TODO: parse title and text from davarthird
