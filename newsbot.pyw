@@ -44,10 +44,12 @@ while run:
             davarfirsttext = davarfirstsoup.select('.article-body')[0].getText()
             logging.info('davarfirst text: ' + davarfirsttext[0:50])
             # TODO: this should take the title and writer's name:
-            davarfirstitle = davarfirstsoup.select('.headline') # FIXME: make sure it takes only the first one (the real title)
-            # TODO: parse title and text from davarsecond
+            davarfirstitle = davarfirstsoup.select('.headline')[0].getText()
+            davarfirstauthor = davarfirstsoup.select('.under-headline')[0].getText()
+            logging.info('title, author and date: %s %s' % (davarfirstitle, davarfirstauthor))
+            # TODO: copy parsing method from first article
 
-            # TODO: parse title and text from davarthird
+            # TODO: copy parsing method from first article
 
         except:
             logging.error(traceback.format_exc())
@@ -56,7 +58,7 @@ while run:
             haaretz = requests.get('https://www.haaretz.co.il/')
             haaretz.raise_for_status()
             logging.debug('got haaretz')
-             # TODO parse it so it takes the first 3 articles head and content
+            # TODO parse it so it takes the first 3 articles head and content
 
         except:
             haaretz = 'נמנעה הגישה לעיתון הארץ'
