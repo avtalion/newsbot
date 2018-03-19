@@ -27,15 +27,24 @@ while run:
                 raise Exception('No articles found on davar1')
 
             logging.info('Matched %d items at davar1' % (len(headlinelinks)))
-            # gets the first three article pages
+            # gets the first three article pages and makes sure they are there
             davarfirst = requests.get(headlinelinks[0].get('href'))
+            davarfirst.raise_for_status()
             davarsecond = requests.get(headlinelinks[1].get('href'))
+            davarsecond.raise_for_status()
             davarthird = requests.get(headlinelinks[3].get('href'))
+            davarthird.raise_for_status()
+
             logging.info('First article: %s' % headlinelinks[0].get('href'))
             logging.info('Second article: %s' % headlinelinks[1].get('href'))
             logging.info('Third article: %s' % headlinelinks[3].get('href'))
             # TODO: parse title and text from davarfirst
-            
+            # takes the content out of the page:
+            davarfirstsoup = bs4.BeautifulSoup(davarfirst.text, 'lxml')
+            davarfirsttext = davarfirstsoup.select('.article-body')[0].getText()
+            logging.info('davarfirst text: ' + davarfirsttext[0:50])
+            # TODO: this should take the title and writer's name:
+            davarfirstitle = davarfirstsoup.select('.headline') # FIXME: make sure it takes only the first one (the real title)
             # TODO: parse title and text from davarsecond
 
             # TODO: parse title and text from davarthird
