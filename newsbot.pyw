@@ -6,6 +6,7 @@ import bs4
 import logging
 import traceback
 # this should get 3 atricles from 3 different site and send it to nevet vie gmail.
+# FIXME: when the project is operetional i should addfilename='log.txt' to the logging.basicConfig line
 logging.basicConfig(level=logging.INFO,
                     format=' %(asctime)s - %(levelname)s - %(message)s')
 
@@ -22,18 +23,26 @@ while run:
             logging.debug('got davar1')
             davarsoup = bs4.BeautifulSoup(davar.text, 'lxml')
             headlinelinks = davarsoup.select('.headline > a') # gets only the links from the page
+            if len(headlinelinks) == 0:
+                raise Exception('No articles found on davar1')
+
             logging.info('Matched %d items at davar1' % (len(headlinelinks)))
             # gets the first three article pages
             davarfirst = requests.get(headlinelinks[0].get('href'))
             davarsecond = requests.get(headlinelinks[1].get('href'))
             davarthird = requests.get(headlinelinks[2].get('href'))
-            logging.info('\nfirst article: %s\nsecond article: %s\nthird article: %s' % (headlinelinks[0], headlinelinks[1], headlinelinks[2]))
-            # TODO take the articles and the title to them
+            logging.info('First article: %s' % headlinelinks[0].get('href'))
+            logging.info('Second article: %s' % headlinelinks[1].get('href'))
+            logging.info('Third article: %s' % headlinelinks[3].get('href'))
+            # TODO: parse title and text from davarfirst
+
+            # TODO: parse title and text from davarsecond
+
+            # TODO: parse title and text from davarthird
 
         except:
-            davar = 'נמנעה הגישה לדבר ראשון'
             logging.error(traceback.format_exc())
-# takes a page from haaretz
+            # takes a page from haaretz
         try:
             haaretz = requests.get('https://www.haaretz.co.il/')
             haaretz.raise_for_status()
@@ -49,7 +58,7 @@ while run:
             makor_rishon = requests.get('https://www.makorrishon.co.il/')
             makor_rishon.raise_for_status()
             logging.debug('got makor rishon')
-            # TODO parse it so it takes the first 3 articles head and content
+            # TODO: parse it so it takes the first 3 articles head and content
 
         except:
             makor_rishon = 'נמנעה הגישה למקור ראשון'
@@ -59,15 +68,15 @@ while run:
             marker = requests.get('https://www.themarker.com/')
             marker.raise_for_status()
             logging.debug('got the marker')
-            # TODO parse it so it takes the first 3 articles head and content
+            # TODO: parse it so it takes the first 3 articles head and content
 
         except:
             logging.error(traceback.format_exc())
             marker = 'נמנעה הגישה לדה מרקר'
         exit() # this one to be eliminated once i start working on the .doc
-# TODO make it one .doc file
+# TODO: make it one .doc file
 
-# TODO send it to the kindle
+# TODO: send it to the kindle
 
         time.sleep(60) # this makes sure it runs once a day
 
