@@ -38,16 +38,26 @@ while run:
             logging.info('First article: %s' % headlinelinks[0].get('href'))
             logging.info('Second article: %s' % headlinelinks[1].get('href'))
             logging.info('Third article: %s' % headlinelinks[3].get('href'))
-            # TODO: parse title and text from davarfirst
+
+            # davarfirst parsing:
             # takes the content out of the page:
             davarfirstsoup = bs4.BeautifulSoup(davarfirst.text, 'lxml')
             davarfirsttext = davarfirstsoup.select('.article-body')[0].getText()
             logging.info('davarfirst text: ' + davarfirsttext[0:50])
-            # TODO: this should take the title and writer's name:
+            # takes the title and author's name:
             davarfirstitle = davarfirstsoup.select('.headline')[0].getText()
             davarfirstauthor = davarfirstsoup.select('.under-headline')[0].getText()
-            logging.info('title, author and date: %s %s' % (davarfirstitle, davarfirstauthor))
-            # TODO: copy parsing method from first article
+            logging.info('davarfirst title, author and date: %s %s' % (davarfirstitle, davarfirstauthor))
+
+            # davarsecond parsing:
+            # takes author and title from second article:
+            davarsecondsoup = bs4.BeautifulSoup(davarsecond.text, 'lxml')
+            davarsecondtitle = davarsecondsoup.select('.headline')[0].getText()
+            davarsecondauthor = davarsecondsoup.select('.under-headline')[0].getText()
+            logging.info('davarsecond title, author and date: %s %s' % (davarsecondtitle, davarsecondauthor))
+            # gets main content from davarsecond:
+            davarsecondtext = davarsecondsoup.select('.article-body')[0].getText()
+            logging.info('davarsecond text: ' + davarsecondtext[0:50])
 
             # TODO: copy parsing method from first article
 
