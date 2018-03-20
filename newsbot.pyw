@@ -9,6 +9,16 @@ import traceback
 # FIXME: when the project is operetional i should addfilename='log.txt' to the logging.basicConfig line
 logging.basicConfig(level=logging.INFO,
                     format=' %(asctime)s - %(levelname)s - %(message)s')
+# this does everything but front page for davar1
+def parsedavar(address):
+    davarsoup = bs4.BeautifulSoup(address.text, 'lxml')
+    # gets headline:
+    davartitle = davarsoup.select('.headline')[0].getText()
+    # gets author:
+    davarauthor = davarsoup.select('.under-headline')[0].getText()
+    # gets the content:
+    davartext = davarsoup.select('.article-body')[0].getText()
+    return (davartitle, davarauthor, davartext)
 
 logging.debug('Start of program')
 run = True
@@ -20,13 +30,13 @@ while run:
         try:
             davar = requests.get('http://www.davar1.co.il/')
             davar.raise_for_status()
-            logging.debug('got davar1')
+            logging.debug('got davar1 front')
             davarsoup = bs4.BeautifulSoup(davar.text, 'lxml')
             headlinelinks = davarsoup.select('.headline > a') # gets only the links from the page
             if len(headlinelinks) == 0:
                 raise Exception('No articles found on davar1')
 
-            logging.info('Matched %d items at davar1' % (len(headlinelinks)))
+            logging.debug('Matched %d items at davar1' % (len(headlinelinks)))
             # gets the first three article pages and makes sure they are there
             davarfirst = requests.get(headlinelinks[0].get('href'))
             davarfirst.raise_for_status()
@@ -39,30 +49,26 @@ while run:
             logging.info('Second article: %s' % headlinelinks[1].get('href'))
             logging.info('Third article: %s' % headlinelinks[3].get('href'))
 
-            # davarfirst parsing:
-            # takes the content out of the page:
-            davarfirstsoup = bs4.BeautifulSoup(davarfirst.text, 'lxml')
-            davarfirsttext = davarfirstsoup.select('.article-body')[0].getText()
-            logging.info('davarfirst text: ' + davarfirsttext[0:50])
-            # takes the title and author's name:
-            davarfirstitle = davarfirstsoup.select('.headline')[0].getText()
-            davarfirstauthor = davarfirstsoup.select('.under-headline')[0].getText()
-            logging.info('davarfirst title, author and date: %s %s' % (davarfirstitle, davarfirstauthor))
-
-            # davarsecond parsing:
-            # takes author and title from second article:
-            davarsecondsoup = bs4.BeautifulSoup(davarsecond.text, 'lxml')
-            davarsecondtitle = davarsecondsoup.select('.headline')[0].getText()
-            davarsecondauthor = davarsecondsoup.select('.under-headline')[0].getText()
-            logging.info('davarsecond title, author and date: %s %s' % (davarsecondtitle, davarsecondauthor))
-            # gets main content from davarsecond:
-            davarsecondtext = davarsecondsoup.select('.article-body')[0].getText()
-            logging.info('davarsecond text: ' + davarsecondtext[0:50])
-
-            # TODO: copy parsing method from first article
+            # parse davarfirst:
+            davarfirstcontent = parsedavar(davarfirst)
+            logging.info('Davarfirst title: ' + davarfirstcontent[0])
+            logging.info('Davarfirst author: ' + davarfirstcontent[1])
+            logging.info('Davarfirst text: ' + davarfirstcontent[2][0:50])
+            # parse davarsecond:
+            davarsecondcontent = parsedavar(davarsecond)
+            logging.info('Davarsecond title: ' + davarsecondcontent[0])
+            logging.info('Davarsecond author: ' + davarsecondcontent[1])
+            logging.info('davarsecond text: ' + davarsecondcontent[2][0:50])
+            # parse davarthird:
+            davarthirdcontent = parsedavar(davarthird)
+            logging.info('davarthird title: ' + davarthirdcontent[0])
+            logging.info('davarthird author: ' + davarthirdcontent[1])
+            logging.info('davarthird text: ' + davarthirdcontent[2][0:50])
+            logging.debug('Got davar1.')
 
         except:
             logging.error(traceback.format_exc())
+
             # takes a page from haaretz
         try:
             haaretz = requests.get('https://www.haaretz.co.il/')
