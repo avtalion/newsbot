@@ -20,6 +20,12 @@ def parsedavar(address):
     davartext = davarsoup.select('.article-body')[0].getText()
     return (davartitle, davarauthor, davartext)
 
+# TODO: build a parsing func for haaretz
+
+# TODO: build a parsing func for makor1
+
+# TODO: build a parsing func for the themarker
+
 logging.debug('Start of program')
 run = True
 while run:
@@ -74,7 +80,7 @@ while run:
             haaretz = requests.get('https://www.haaretz.co.il/')
             haaretz.raise_for_status()
             logging.debug('got haaretz')
-            # TODO parse it so it takes the first 3 articles head and content
+            # TODO make a parsing
 
         except:
             haaretz = 'נמנעה הגישה לעיתון הארץ'
