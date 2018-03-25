@@ -95,7 +95,6 @@ while run:
             makor1.raise_for_status()
             logging.debug('got makor1 front')
             makorsoup = bs4.BeautifulSoup(makor1.text, 'lxml')
-            makorlinks = makorsoup.select('')
 
             # TODO: parse it so it takes the first 3 articles head and content
 
