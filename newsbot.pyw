@@ -21,9 +21,12 @@ def parsedavar(address):
     return (davartitle, davarauthor, davartext)
 
 # TODO: build a parsing func for haaretz
+def parsehaaretz(address):
+    haaretzsoup = bs4.BeautifulSoup(address.text, 'lxml')
 
 # TODO: build a parsing func for makor1
-
+def parsemakor(address):
+    makorsoup
 # TODO: build a parsing func for the themarker
 
 logging.debug('Start of program')
@@ -38,22 +41,22 @@ while run:
             davar.raise_for_status()
             logging.debug('got davar1 front')
             davarsoup = bs4.BeautifulSoup(davar.text, 'lxml')
-            headlinelinks = davarsoup.select('.headline > a') # gets only the links from the page
-            if len(headlinelinks) == 0:
+            davarlinks = davarsoup.select('.headline > a') # gets only the links from the page
+            if len(davarlinks) == 0:
                 raise Exception('No articles found on davar1')
 
-            logging.debug('Matched %d items at davar1' % (len(headlinelinks)))
+            logging.debug('Matched %d items at davar1' % (len(davarlinks)))
             # gets the first three article pages and makes sure they are there
-            davarfirst = requests.get(headlinelinks[0].get('href'))
+            davarfirst = requests.get(davarlinks[0].get('href'))
             davarfirst.raise_for_status()
-            davarsecond = requests.get(headlinelinks[1].get('href'))
+            davarsecond = requests.get(davarlinks[1].get('href'))
             davarsecond.raise_for_status()
-            davarthird = requests.get(headlinelinks[3].get('href'))
+            davarthird = requests.get(davarlinks[3].get('href'))
             davarthird.raise_for_status()
 
-            logging.info('First article: %s' % headlinelinks[0].get('href'))
-            logging.info('Second article: %s' % headlinelinks[1].get('href'))
-            logging.info('Third article: %s' % headlinelinks[3].get('href'))
+            logging.info('First article: %s' % davarlinks[0].get('href'))
+            logging.info('Second article: %s' % davarlinks[1].get('href'))
+            logging.info('Third article: %s' % davarlinks[3].get('href'))
 
             # parse davarfirst:
             davarfirstcontent = parsedavar(davarfirst)
@@ -88,9 +91,12 @@ while run:
 
 # gets the article from makor rishon
         try:
-            makor_rishon = requests.get('https://www.makorrishon.co.il/')
-            makor_rishon.raise_for_status()
-            logging.debug('got makor rishon')
+            makor1 = requests.get('https://www.makorrishon.co.il/')
+            makor1.raise_for_status()
+            logging.debug('got makor1 front')
+            makorsoup = bs4.BeautifulSoup(makor1.text, 'lxml')
+            makorlinks = makorsoup.select('')
+
             # TODO: parse it so it takes the first 3 articles head and content
 
         except:
