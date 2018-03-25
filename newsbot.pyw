@@ -5,6 +5,7 @@ import requests
 import bs4
 import logging
 import traceback
+import docx
 # this should get 3 atricles from 3 different site and send it to nevet vie gmail.
 # FIXME: when the project is operetional i should addfilename='log.txt' to the logging.basicConfig line
 logging.basicConfig(level=logging.INFO,
@@ -67,13 +68,13 @@ while run:
             davarsecondcontent = parsedavar(davarsecond)
             logging.info('Davarsecond title: ' + davarsecondcontent[0])
             logging.info('Davarsecond author: ' + davarsecondcontent[1])
-            logging.info('davarsecond text: ' + davarsecondcontent[2][0:50])
+            logging.info('Davarsecond text: ' + davarsecondcontent[2][0:50])
             # parse davarthird:
             davarthirdcontent = parsedavar(davarthird)
-            logging.info('davarthird title: ' + davarthirdcontent[0])
-            logging.info('davarthird author: ' + davarthirdcontent[1])
-            logging.info('davarthird text: ' + davarthirdcontent[2][0:50])
-            logging.debug('Got davar1.')
+            logging.info('Davarthird title: ' + davarthirdcontent[0])
+            logging.info('Davarthird author: ' + davarthirdcontent[1])
+            logging.info('Davarthird text: ' + davarthirdcontent[2][0:50])
+            logging.debug('Got Davar1.')
 
         except:
             logging.error(traceback.format_exc())
