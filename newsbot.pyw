@@ -1,4 +1,3 @@
-#!/usr/bin/python3
 import time
 import datetime
 import requests
@@ -115,7 +114,11 @@ while run:
             marker = 'נמנעה הגישה לדה מרקר'
         exit() # this one to be eliminated once i start working on the .doc
 # TODO: make it one .doc file
+        doc = docx.Document()
+        doc.add_paragraph(''.join(davarfirstcontent)) # joins davarfirst to one string in adds
+        logging.info('davarfirst written to file:' + ''.join(davarfirstcontent)[0:100])
 
+        doc.save('docs\\news_of_%d/%d/%d.docx' % (now.day, now.month, now.year))
 # TODO: send it to the kindle
 
         time.sleep(60) # this makes sure it runs once a day
