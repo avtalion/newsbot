@@ -20,13 +20,13 @@ def parsedavar(address):
     davartext = davarsoup.select('.article-body')[0].getText()
     return (davartitle, davarauthor, davartext)
 
-# TODO: build a parsing func for haaretz
+# TODO: build a parsing func for haaretz. LAST, PROB IMPOSSIBLE.
 def parsehaaretz(address):
     haaretzsoup = bs4.BeautifulSoup(address.text, 'lxml')
 
 # TODO: build a parsing func for makor1
 def parsemakor(address):
-    makorsoup
+
 # TODO: build a parsing func for the themarker
 
 logging.debug('Start of program')
@@ -83,20 +83,31 @@ while run:
             haaretz = requests.get('https://www.haaretz.co.il/')
             haaretz.raise_for_status()
             logging.debug('got haaretz')
-            # TODO make a parsing
 
         except:
             haaretz = 'נמנעה הגישה לעיתון הארץ'
             logging.error(traceback.format_exc())
 
-# gets the article from makor rishon
+# gets the article address from makor rishon
         try:
             makor1 = requests.get('https://www.makorrishon.co.il/')
             makor1.raise_for_status()
             logging.debug('got makor1 front')
             makorsoup = bs4.BeautifulSoup(makor1.text, 'lxml')
+            makorlinks = makorsoup.select('.jeg_post_title > a')
+            if len(makorlinks) == 0:
+                raise Exception('No articles found on makor1')
 
-            # TODO: parse it so it takes the first 3 articles head and content
+            logging.debug('Matched %d items on makor1' % (len(makorlinks)))
+            # gets thr first three articles # HACK: done in a hurry. needs to be checked.
+            makorfirst = requests.get(makorlinks[0].get('href'))
+            makorfirst.raise_for_status()
+            makorsecond = requests.get(makorlinks[1].get('href'))
+            makorsecond.raise_for_status()
+            makorthird = requests.get(makorlinks[2].get('href'))
+            makorthird.raise_for_status()
+
+            # TODO: parse it 3 times with parsemakor
 
         except:
             makor_rishon = 'נמנעה הגישה למקור ראשון'
@@ -114,9 +125,10 @@ while run:
 # TODO: make it one .doc file
         doc = docx.Document()
         doc.add_paragraph(''.join(davarfirstcontent)) # joins davarfirst to one string in adds
-        logging.info('davarfirst written to file:' + ''.join(davarfirstcontent)[0:100])
 
         doc.save('docs\\news_of_%d/%d/%d.docx' % (now.day, now.month, now.year))
+        logging.info('davarfirst written to file:' + ''.join(davarfirstcontent)[0:100])
+        exit() # FIXME to be pushed out when script is operetional.
 # TODO: send it to the kindle
 
         time.sleep(60) # this makes sure it runs once a day
