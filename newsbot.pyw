@@ -95,7 +95,6 @@ while run:
             makor1.raise_for_status()
             logging.debug('got makor1 front')
             makorsoup = bs4.BeautifulSoup(makor1.text, 'lxml')
-            makorlinks = makorsoup.select('')
 
             # TODO: parse it so it takes the first 3 articles head and content
 
@@ -112,7 +111,6 @@ while run:
         except:
             logging.error(traceback.format_exc())
             marker = 'נמנעה הגישה לדה מרקר'
-        exit() # this one to be eliminated once i start working on the .doc
 # TODO: make it one .doc file
         doc = docx.Document()
         doc.add_paragraph(''.join(davarfirstcontent)) # joins davarfirst to one string in adds
