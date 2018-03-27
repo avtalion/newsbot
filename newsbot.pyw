@@ -107,6 +107,10 @@ while run:
             makorthird = requests.get(makorlinks[2].get('href'))
             makorthird.raise_for_status()
 
+            logging.info('First article: ' + makorlinks[0].get('href'))
+            logging.info('Second article: ' + makorlinks[1].get('href'))
+            logging.info('Third article: ' + makorlinks[2].get('href'))
+
             # TODO: parse it 3 times with parsemakor
 
         except:
