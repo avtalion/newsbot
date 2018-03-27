@@ -11,8 +11,8 @@ import docx
 logging.basicConfig(level=logging.INFO,
                     format=' %(asctime)s - %(levelname)s - %(message)s')
 # this does everything but front page for davar1
-def parsedavar(address):
-    davarsoup = bs4.BeautifulSoup(address.text, 'lxml')
+def parsedavar(pagereq):
+    davarsoup = bs4.BeautifulSoup(pagereq.text, 'lxml')
     # gets headline:
     davartitle = davarsoup.select('.headline')[0].getText()
     # gets author:
@@ -22,12 +22,20 @@ def parsedavar(address):
     return (davartitle, davarauthor, davartext)
 
 # TODO: build a parsing func for haaretz. LAST, PROB IMPOSSIBLE.
-def parsehaaretz(address):
-    haaretzsoup = bs4.BeautifulSoup(address.text, 'lxml')
+def parsehaaretz(pagereq):
+    haaretzsoup = bs4.BeautifulSoup(pagereq.text, 'lxml')
+    return
 
 # TODO: build a parsing func for makor1
-def parsemakor(address):
-
+def parsemakor(pagereq):
+    makorsoup = bs4.BeautifulSoup(pagereq.text, 'lxml')
+    # gets headline:
+    makortitle = makorsoup.select('h1')[0].getText()
+    # gets undertitle:
+    makorunder = makorsoup.select('.jeg_post_subtitle')[0].getText()
+    # gets author and date:
+    makorauthor = makorsoup.select('.meta_left')[0].getText()
+    return (makortitle, makorunder, makorauthor) # FIXME: comes out in gibbrish! need to figure out.
 # TODO: build a parsing func for the themarker
 
 logging.debug('Start of program')
