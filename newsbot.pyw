@@ -5,6 +5,7 @@ import requests
 import bs4
 import logging
 import traceback
+import docx
 # this should get 3 atricles from 3 different site and send it to nevet vie gmail.
 # FIXME: when the project is operetional i should addfilename='log.txt' to the logging.basicConfig line
 logging.basicConfig(level=logging.INFO,
@@ -20,13 +21,13 @@ def parsedavar(address):
     davartext = davarsoup.select('.article-body')[0].getText()
     return (davartitle, davarauthor, davartext)
 
-# TODO: build a parsing func for haaretz
+# TODO: build a parsing func for haaretz. LAST, PROB IMPOSSIBLE.
 def parsehaaretz(address):
     haaretzsoup = bs4.BeautifulSoup(address.text, 'lxml')
 
 # TODO: build a parsing func for makor1
 def parsemakor(address):
-    makorsoup
+
 # TODO: build a parsing func for the themarker
 
 logging.debug('Start of program')
@@ -67,13 +68,13 @@ while run:
             davarsecondcontent = parsedavar(davarsecond)
             logging.info('Davarsecond title: ' + davarsecondcontent[0])
             logging.info('Davarsecond author: ' + davarsecondcontent[1])
-            logging.info('davarsecond text: ' + davarsecondcontent[2][0:50])
+            logging.info('Davarsecond text: ' + davarsecondcontent[2][0:50])
             # parse davarthird:
             davarthirdcontent = parsedavar(davarthird)
-            logging.info('davarthird title: ' + davarthirdcontent[0])
-            logging.info('davarthird author: ' + davarthirdcontent[1])
-            logging.info('davarthird text: ' + davarthirdcontent[2][0:50])
-            logging.debug('Got davar1.')
+            logging.info('Davarthird title: ' + davarthirdcontent[0])
+            logging.info('Davarthird author: ' + davarthirdcontent[1])
+            logging.info('Davarthird text: ' + davarthirdcontent[2][0:50])
+            logging.debug('Got Davar1.')
 
         except:
             logging.error(traceback.format_exc())
@@ -83,20 +84,35 @@ while run:
             haaretz = requests.get('https://www.haaretz.co.il/')
             haaretz.raise_for_status()
             logging.debug('got haaretz')
-            # TODO make a parsing
 
         except:
             haaretz = 'נמנעה הגישה לעיתון הארץ'
             logging.error(traceback.format_exc())
 
-# gets the article from makor rishon
+# gets the article address from makor rishon
         try:
             makor1 = requests.get('https://www.makorrishon.co.il/')
             makor1.raise_for_status()
             logging.debug('got makor1 front')
             makorsoup = bs4.BeautifulSoup(makor1.text, 'lxml')
+            makorlinks = makorsoup.select('.jeg_post_title > a')
+            if len(makorlinks) == 0:
+                raise Exception('No articles found on makor1')
 
-            # TODO: parse it so it takes the first 3 articles head and content
+            logging.debug('Matched %d items on makor1' % (len(makorlinks)))
+            # gets thr first three articles # HACK: done in a hurry. needs to be checked.
+            makorfirst = requests.get(makorlinks[0].get('href'))
+            makorfirst.raise_for_status()
+            makorsecond = requests.get(makorlinks[1].get('href'))
+            makorsecond.raise_for_status()
+            makorthird = requests.get(makorlinks[2].get('href'))
+            makorthird.raise_for_status()
+
+            logging.info('First article: ' + makorlinks[0].get('href'))
+            logging.info('Second article: ' + makorlinks[1].get('href'))
+            logging.info('Third article: ' + makorlinks[2].get('href'))
+
+            # TODO: parse it 3 times with parsemakor
 
         except:
             makor_rishon = 'נמנעה הגישה למקור ראשון'
