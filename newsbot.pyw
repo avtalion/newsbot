@@ -127,7 +127,7 @@ while run:
         except:
             logging.error(traceback.format_exc())
             marker = 'נמנעה הגישה לדה מרקר'
-        exit() # this one to be eliminated once i start working on the .doc
+        exit() # this one to be eliminated on the windows version
 # TODO: make it one .doc file
 
 # TODO: send it to the kindle
