@@ -71,36 +71,24 @@ while run:
             logging.info('Second article: %s' % davarlinks[1].get('href'))
             logging.info('Third article: %s' % davarlinks[3].get('href'))
 
-            # parse davarfirst:
-            davarfirstcontent = parsedavar(davarfirst)
+            davarfirstcontent = parsedavar(davarfirst) # parse davarfirst:
             logging.info('Davarfirst title: ' + davarfirstcontent[0])
             logging.info('Davarfirst author: ' + davarfirstcontent[1])
             logging.info('Davarfirst text: ' + davarfirstcontent[2][0:50])
-            # parse davarsecond:
-            davarsecondcontent = parsedavar(davarsecond)
+            davarsecondcontent = parsedavar(davarsecond) # parse davarsecond:
             logging.info('Davarsecond title: ' + davarsecondcontent[0])
             logging.info('Davarsecond author: ' + davarsecondcontent[1])
             logging.info('Davarsecond text: ' + davarsecondcontent[2][0:50])
-            # parse davarthird:
-            davarthirdcontent = parsedavar(davarthird)
+            davarthirdcontent = parsedavar(davarthird) # parse davarthird:
             logging.info('Davarthird title: ' + davarthirdcontent[0])
             logging.info('Davarthird author: ' + davarthirdcontent[1])
             logging.info('Davarthird text: ' + davarthirdcontent[2][0:50])
             logging.debug('Got Davar1.')
 
         except:
-            davarfirstcontent = 'שגיאה. בדוק ביומן אירועים.'
-            davarsecondcontent = 'שגיאה. בדוק ביומן אירועים.'
-            davarthirdcontent = 'שגיאה. בדוק ביומן אירועים.'
-            logging.error(traceback.format_exc())
-            # takes a page from haaretz
-        try:
-            haaretz = requests.get('https://www.haaretz.co.il/')
-            haaretz.raise_for_status()
-            logging.debug('got haaretz')
-
-        except:
-            haaretz = 'נמנעה הגישה לעיתון הארץ'
+            davarfirstcontent = 'שגיאה בדבר ראשון. בדוק ביומן אירועים.'
+            davarsecondcontent = 'שגיאה בדבר ראשון. בדוק ביומן אירועים.'
+            davarthirdcontent = 'שגיאה בדבר ראשון. בדוק ביומן אירועים.'
             logging.error(traceback.format_exc())
 
 # gets the article address from makor rishon
@@ -144,10 +132,12 @@ while run:
             logging.info('Makorthird author: ' + makorthirdcontent[2])
             logging.info('Makorthird content: ' + makorthirdcontent[3][0:50])
 
-        except: # FIXME: needs to be changed so it sends an error message to nevet.
-            makor_rishon = 'נמנעה הגישה למקור ראשון'
+        except:
+            makorfirstcontent = 'שגיאה במקור ראשון. בדוק יומן אירועים'
+            makorsecondcontent = 'שגיאה במקור ראשון. בדוק יומן אירועים'
+            makorthirdcontent = 'שגיאה במקור ראשון. בדוק יומן אירועים'
             logging.error(traceback.format_exc())
-# gets the article from the marker
+            # gets the article from the marker
         try:
             marker = requests.get('https://www.themarker.com/')
             marker.raise_for_status()
