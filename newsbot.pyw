@@ -28,14 +28,18 @@ def parsehaaretz(pagereq):
 
 # TODO: build a parsing func for makor1
 def parsemakor(pagereq):
+    # makor1 is a shit website, says its ISO when its UTF-8.
+    pagereq.encoding = 'utf-8'
     makorsoup = bs4.BeautifulSoup(pagereq.text, 'lxml')
     # gets headline:
     makortitle = makorsoup.select('h1')[0].getText()
     # gets undertitle:
     makorunder = makorsoup.select('.jeg_post_subtitle')[0].getText()
     # gets author and date:
-    makorauthor = makorsoup.select('.meta_left')[0].getText()
-    return (makortitle, makorunder, makorauthor) # FIXME: comes out in gibbrish! need to figure out.
+    makorauthor = makorsoup.select('.jeg_meta_author')[0].getText()
+    #gets the content:
+    makorcontent = makorsoup.select('.content-inner')[0].getText()
+    return (makortitle, makorunder, makorauthor, makorcontent)
 # TODO: build a parsing func for the themarker
 
 logging.debug('Start of program')
@@ -101,6 +105,7 @@ while run:
         try:
             makor1 = requests.get('https://www.makorrishon.co.il/')
             makor1.raise_for_status()
+            makor1.encoding = 'utf-8'
             logging.debug('got makor1 front')
             makorsoup = bs4.BeautifulSoup(makor1.text, 'lxml')
             makorlinks = makorsoup.select('.jeg_post_title > a')
@@ -120,8 +125,13 @@ while run:
             logging.info('Second article: ' + makorlinks[1].get('href'))
             logging.info('Third article: ' + makorlinks[2].get('href'))
 
-            # TODO: parse it 3 times with parsemakor
-
+            # this parses makor1 top 3 articles.
+            makorfirstcontent = parsemakor(makorfirst)
+            logging.info('Makorfirst title: ' + makorfirstcontent[0])
+            logging.info('Makorfirst under: ' + makorfirstcontent[1][0:50])
+            logging.info('Makorfirst author: ' + makorfirstcontent[2])
+            logging.info('Makorfirst content: ' + makorfirstcontent[3][0:50])
+            # TODO: two more!
         except:
             makor_rishon = 'נמנעה הגישה למקור ראשון'
             logging.error(traceback.format_exc())
