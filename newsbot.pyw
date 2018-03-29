@@ -89,8 +89,10 @@ while run:
             logging.debug('Got Davar1.')
 
         except:
+            davarfirstcontent = 'שגיאה. בדוק ביומן אירועים.'
+            davarsecondcontent = 'שגיאה. בדוק ביומן אירועים.'
+            davarthirdcontent = 'שגיאה. בדוק ביומן אירועים.'
             logging.error(traceback.format_exc())
-
             # takes a page from haaretz
         try:
             haaretz = requests.get('https://www.haaretz.co.il/')
@@ -126,13 +128,23 @@ while run:
             logging.info('Third article: ' + makorlinks[2].get('href'))
 
             # this parses makor1 top 3 articles.
-            makorfirstcontent = parsemakor(makorfirst)
+            makorfirstcontent = parsemakor(makorfirst) # makorfirst:
             logging.info('Makorfirst title: ' + makorfirstcontent[0])
             logging.info('Makorfirst under: ' + makorfirstcontent[1][0:50])
             logging.info('Makorfirst author: ' + makorfirstcontent[2])
             logging.info('Makorfirst content: ' + makorfirstcontent[3][0:50])
-            # TODO: two more!
-        except:
+            makorsecondcontent = parsemakor(makorsecond) # makorsecond:
+            logging.info('Makorsecond title: ' + makorsecondcontent[0])
+            logging.info('Makorsecond under: ' + makorsecondcontent[1][0:50])
+            logging.info('Makorsecond author: ' + makorsecondcontent[2])
+            logging.info('Makorsecond content: ' + makorsecondcontent[3][0:50])
+            makorthirdcontent = parsemakor(makorthird) # makorthird:
+            logging.info('Makorthird title: ' + makorthirdcontent[0])
+            logging.info('Makorthird under: ' + makorthirdcontent[1][0:50])
+            logging.info('Makorthird author: ' + makorthirdcontent[2])
+            logging.info('Makorthird content: ' + makorthirdcontent[3][0:50])
+
+        except: # FIXME: needs to be changed so it sends an error message to nevet.
             makor_rishon = 'נמנעה הגישה למקור ראשון'
             logging.error(traceback.format_exc())
 # gets the article from the marker
