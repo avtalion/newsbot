@@ -26,7 +26,7 @@ def parsehaaretz(pagereq):
     haaretzsoup = bs4.BeautifulSoup(pagereq.text, 'lxml')
     return
 
-# TODO: build a parsing func for makor1
+# parses makor1
 def parsemakor(pagereq):
     # makor1 is a shit website, says its ISO when its UTF-8.
     pagereq.encoding = 'utf-8'
@@ -40,7 +40,21 @@ def parsemakor(pagereq):
     #gets the content:
     makorcontent = makorsoup.select('.content-inner')[0].getText()
     return (makortitle, makorunder, makorauthor, makorcontent)
+
 # TODO: build a parsing func for the themarker
+def parsemarker(pagereq):
+    markersoup = bs4.BeautifulSoup(pagereq.text, 'lxml')
+    # gets the headline:
+    markertitle = markersoup.select('h1')[0].getText()
+    # gets the description:
+    markerunder = markersoup.select('p.t-delta')[0].getText()
+    # TODO: get author
+
+    # TODO: get the time
+    markertime = markersoup.select('time')[0].get('datetime')
+    # TODO: get all the paragraphs, right now only matches doesnt pick.
+    markercontent = markersoup.select('.t-body-text') # HACK: done in a hurry, needs work.
+    return
 
 logging.debug('Start of program')
 run = True
@@ -91,7 +105,7 @@ while run:
             davarthirdcontent = 'שגיאה בדבר ראשון. בדוק ביומן אירועים.'
             logging.error(traceback.format_exc())
 
-# gets the article address from makor rishon
+# gets the article pagereq from makor rishon
         try:
             makor1 = requests.get('https://www.makorrishon.co.il/')
             makor1.raise_for_status()
@@ -103,7 +117,7 @@ while run:
                 raise Exception('No articles found on makor1')
 
             logging.debug('Matched %d items on makor1' % (len(makorlinks)))
-            # gets thr first three articles # HACK: done in a hurry. needs to be checked.
+            # gets thr first three articles
             makorfirst = requests.get(makorlinks[0].get('href'))
             makorfirst.raise_for_status()
             makorsecond = requests.get(makorlinks[1].get('href'))
@@ -131,17 +145,27 @@ while run:
             logging.info('Makorthird under: ' + makorthirdcontent[1][0:50])
             logging.info('Makorthird author: ' + makorthirdcontent[2])
             logging.info('Makorthird content: ' + makorthirdcontent[3][0:50])
-
         except:
             makorfirstcontent = 'שגיאה במקור ראשון. בדוק יומן אירועים'
             makorsecondcontent = 'שגיאה במקור ראשון. בדוק יומן אירועים'
             makorthirdcontent = 'שגיאה במקור ראשון. בדוק יומן אירועים'
             logging.error(traceback.format_exc())
-            # gets the article from the marker
+
+# gets the article addresses from de marker
         try:
             marker = requests.get('https://www.themarker.com/')
             marker.raise_for_status()
-            logging.debug('got the marker')
+            logging.debug('got De marker front')
+            markersoup = bs4.BeautifulSoup(marker.text, 'lxml')
+            markertop = markersoup.select('.hero__headline') # top needs different parsing protocole
+            if len(sel) == 0:
+                raise Exception('top not found on demarker')
+            markerfirst = requests.get('https://www.themarker.com' + markertop[0].get('href'))
+            markerlinks = markersoup.select('article > a')
+            # the marker has 2 article before the second top 3
+            markersecond = requests.get('https://www.themarker.com' + markerlinks[2].get('href'))
+            markerthird = requests.get('https://www.themarker.com' + markerlinks[3].get('href'))
+
             # TODO: parse it so it takes the first 3 articles head and content
 
         except:
