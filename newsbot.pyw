@@ -48,13 +48,17 @@ def parsemarker(pagereq):
     markertitle = markersoup.select('h1')[0].getText()
     # gets the description:
     markerunder = markersoup.select('p.t-delta')[0].getText()
-    # TODO: get author
-
-    # TODO: get the time
+    # gets author
+    markerauthor = markersoup.select('a.js-stat-util-info')[0].get('data-statutil-writer')
+    # gets the time
     markertime = markersoup.select('time')[0].get('datetime')
-    # TODO: get all the paragraphs, right now only matches doesnt pick.
-    markercontent = markersoup.select('.t-body-text') # HACK: done in a hurry, needs work.
-    return
+    # gets all the paragraphs
+    markercontent = ''
+    contentlist = markersoup.select('.t-body-text')
+    for i in contentlist: # FIXME: prob can be much shorter using .join!
+        if contentlist.index(i) >= 3:
+            markercontent = markercontent + i.getText()
+    return (markertitle, markerauthor, markertime, markerunder, markercontent)
 
 logging.debug('Start of program')
 run = True
@@ -125,9 +129,9 @@ while run:
             makorthird = requests.get(makorlinks[2].get('href'))
             makorthird.raise_for_status()
 
-            logging.info('First article: ' + makorlinks[0].get('href'))
-            logging.info('Second article: ' + makorlinks[1].get('href'))
-            logging.info('Third article: ' + makorlinks[2].get('href'))
+            logging.info('Makorfirst adress: ' + makorlinks[0].get('href'))
+            logging.info('Makorsecond address: ' + makorlinks[1].get('href'))
+            logging.info('Makorthird address: ' + makorlinks[2].get('href'))
 
             # this parses makor1 top 3 articles.
             makorfirstcontent = parsemakor(makorfirst) # makorfirst:
@@ -158,7 +162,7 @@ while run:
             logging.debug('got De marker front')
             markersoup = bs4.BeautifulSoup(marker.text, 'lxml')
             markertop = markersoup.select('.hero__headline') # top needs different parsing protocole
-            if len(sel) == 0:
+            if len(markertop) == 0:
                 raise Exception('top not found on demarker')
             markerfirst = requests.get('https://www.themarker.com' + markertop[0].get('href'))
             markerlinks = markersoup.select('article > a')
@@ -167,6 +171,13 @@ while run:
             markerthird = requests.get('https://www.themarker.com' + markerlinks[3].get('href'))
 
             # TODO: parse it so it takes the first 3 articles head and content
+            # marker first:
+            markercontent = parsemarker(markerfirst)
+            logging.info('markerfirst title: ' + markercontent[0])
+            logging.info('markerfirst author: ' + markercontent[1])
+            logging.info('markerfirst time: ' + markercontent[2])
+            logging.info('markerfirst under: ' + markercontent[3])
+            logging.info('markerfirst text: ' + markercontent[4][:50])
 
         except:
             logging.error(traceback.format_exc())
