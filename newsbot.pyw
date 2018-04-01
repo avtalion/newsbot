@@ -1,3 +1,4 @@
+#!/usr/bin/env python3
 import time
 import datetime
 import requests
@@ -40,7 +41,7 @@ def parsemakor(pagereq):
     makorcontent = makorsoup.select('.content-inner')[0].getText()
     return (makortitle, makorunder, makorauthor, makorcontent)
 
-# TODO: build a parsing func for the themarker
+# a parsing func for the marker:
 def parsemarker(pagereq):
     markersoup = bs4.BeautifulSoup(pagereq.text, 'lxml')
     # gets the headline:
@@ -52,11 +53,11 @@ def parsemarker(pagereq):
     # gets the time
     markertime = markersoup.select('time')[0].get('datetime')
     # gets all the paragraphs
-    markercontent = ''
     contentlist = markersoup.select('.t-body-text')
-    for i in contentlist: # FIXME: prob can be much shorter using .join!
-        if contentlist.index(i) >= 3:
-            markercontent = markercontent + i.getText()
+    markercontent = ''.join(contentlist[3:])
+    # for i in contentlist: # FIXME: prob can be much shorter using .join!
+    #     if contentlist.index(i) >= 3:
+    #         markercontent = markercontent + i.getText()
     return (markertitle, markerauthor, markertime, markerunder, markercontent)
 
 logging.debug('Start of program')
@@ -103,9 +104,9 @@ while run:
             logging.debug('Got Davar1.')
 
         except:
-            davarfirstcontent = 'שגיאה בדבר ראשון. בדוק ביומן אירועים.'
-            davarsecondcontent = 'שגיאה בדבר ראשון. בדוק ביומן אירועים.'
-            davarthirdcontent = 'שגיאה בדבר ראשון. בדוק ביומן אירועים.'
+            davarfirstcontent = 'error in davar first. check log.'
+            davarsecondcontent = 'error in davarsecond. check log.'
+            davarthirdcontent = 'error in davarthird. check log.'
             logging.error(traceback.format_exc())
 
 # gets the article pagereq from makor rishon
@@ -149,9 +150,9 @@ while run:
             logging.info('Makorthird author: ' + makorthirdcontent[2])
             logging.info('Makorthird content: ' + makorthirdcontent[3][0:50])
         except:
-            makorfirstcontent = 'שגיאה במקור ראשון. בדוק יומן אירועים'
-            makorsecondcontent = 'שגיאה במקור ראשון. בדוק יומן אירועים'
-            makorthirdcontent = 'שגיאה במקור ראשון. בדוק יומן אירועים'
+            makorfirstcontent = 'error in makorfirst. check log.'
+            makorsecondcontent = 'error in makorsecond. check log.'
+            makorthirdcontent = 'error in makorthird. check log.'
             logging.error(traceback.format_exc())
 
 # gets the article addresses from de marker
@@ -171,7 +172,7 @@ while run:
 
             # TODO: parse it so it takes the first 3 articles head and content
             # marker first:
-            markercontent = parsemarker(markerfirst)
+            markerfirstcontent = parsemarker(markerfirst)
             logging.info('markerfirst title: ' + markercontent[0])
             logging.info('markerfirst author: ' + markercontent[1])
             logging.info('markerfirst time: ' + markercontent[2])
@@ -179,8 +180,10 @@ while run:
             logging.info('markerfirst text: ' + markercontent[4][:50])
 
         except:
+            markerfirstcontent = 'error in markerfirst. check log.'
+            markersecondcontent = 'error in markersecond. check log.'
+            markerthirdcontent = 'error in markerthird. check log.'
             logging.error(traceback.format_exc())
-            marker = 'נמנעה הגישה לדה מרקר'
         exit() # this one to be eliminated on the windows version
 # TODO: make it one .doc file
 
