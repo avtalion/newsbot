@@ -21,7 +21,7 @@ def parsedavar(pagereq):
     davartext = davarsoup.select('.article-body')[0].getText()
     return (davartitle, davarauthor, davartext)
 
-# TODO: build a parsing func for haaretz. LAST, PROB IMPOSSIBLE.
+# TODO: CLEAN THIS OUT
 def parsehaaretz(pagereq):
     haaretzsoup = bs4.BeautifulSoup(pagereq.text, 'lxml')
     return
@@ -60,10 +60,11 @@ def parsemarker(pagereq):
     markercontent = ''.join(newlist[3:])
     return (markertitle, markerauthor, markertime, markerunder, markercontent)
 
-    def writefanc(fileobject, content):
-        for i in content:
-            fileobject.write(i)
-            return 'Done.'
+# this func writes everything clean.
+def writefunc(fileobject, content):
+    for i in content:
+        fileobject.write(i)
+    return 'Done.'
 
 logging.debug('Start of program')
 run = True
@@ -205,9 +206,9 @@ while run:
             logging.error(traceback.format_exc())
 # TODO: make it one .doc file
         doc = open(os.getcwd() + '\docs\File_%d/%d/%d.txt' % (now.day, now.month, now.year, 'w')
-        writefanc(doc, davarfirstcontent)
-        writefanc(doc, davarsecondcontent)
-        writefanc(doc, davarthirdcontent)
+        writefunc(doc, davarfirstcontent)
+        writefunc(doc, davarsecondcontent)
+        writefunc(doc, davarthirdcontent)
         exit() # to be eliminated when working on the mailing
 # TODO: send it to the kindle
 
