@@ -54,10 +54,10 @@ def parsemarker(pagereq):
     markertime = markersoup.select('time')[0].get('datetime')
     # gets all the paragraphs
     contentlist = markersoup.select('.t-body-text')
-    markercontent = ''.join(contentlist[3:])
-    # for i in contentlist: # FIXME: prob can be much shorter using .join!
-    #     if contentlist.index(i) >= 3:
-    #         markercontent = markercontent + i.getText()
+    newlist = []
+    for i in contentlist: # loops over the content list to turn it to text from tag.
+         newlist.append(i.getText())
+    markercontent = ''.join(newlist[3:])
     return (markertitle, markerauthor, markertime, markerunder, markercontent)
 
 logging.debug('Start of program')
@@ -173,11 +173,25 @@ while run:
             # TODO: parse it so it takes the first 3 articles head and content
             # marker first:
             markerfirstcontent = parsemarker(markerfirst)
-            logging.info('markerfirst title: ' + markercontent[0])
-            logging.info('markerfirst author: ' + markercontent[1])
-            logging.info('markerfirst time: ' + markercontent[2])
-            logging.info('markerfirst under: ' + markercontent[3])
-            logging.info('markerfirst text: ' + markercontent[4][:50])
+            logging.info('markerfirst title: ' + markerfirstcontent[0])
+            logging.info('markerfirst author: ' + markerfirstcontent[1])
+            logging.info('markerfirst time: ' + markerfirstcontent[2])
+            logging.info('markerfirst under: ' + markerfirstcontent[3][:50])
+            logging.info('markerfirst text: ' + markerfirstcontent[4][:50])
+            # marker second:
+            markersecondcontent = parsemarker(markersecond)
+            logging.info('markersecond title: ' + markersecondcontent[0])
+            logging.info('markersecond author: ' + markersecondcontent[1])
+            logging.info('markersecond time: ' + markersecondcontent[2])
+            logging.info('markersecond under: ' + markersecondcontent[3][:50])
+            logging.info('markersecond text: ' + markersecondcontent[4][:50])
+            # marker third:
+            markerthirdcontent = parsemarker(markerthird)
+            logging.info('markerthird title: ' + markerthirdcontent[0])
+            logging.info('markerthird author: ' + markerthirdcontent[1])
+            logging.info('markerthird time: ' + markerthirdcontent[2])
+            logging.info('markerthird under: ' + markerthirdcontent[3][:50])
+            logging.info('markerthird text: ' + markerthirdcontent[4][:50])
 
         except:
             markerfirstcontent = 'error in markerfirst. check log.'
