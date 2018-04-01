@@ -205,10 +205,12 @@ while run:
             markerthirdcontent = 'error in markerthird. check log.'
             logging.error(traceback.format_exc())
 # TODO: make it one .doc file
-        doc = open(os.getcwd() + '\docs\File_%d/%d/%d.txt' % (now.day, now.month, now.year, 'w')
+        doc = open('File_%d.%d.%d.txt' % (now.day, now.month, now.year), 'w')
         writefunc(doc, davarfirstcontent)
         writefunc(doc, davarsecondcontent)
         writefunc(doc, davarthirdcontent)
+        doc.close()
+
         exit() # to be eliminated when working on the mailing
 # TODO: send it to the kindle
 
