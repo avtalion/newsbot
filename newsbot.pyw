@@ -5,6 +5,7 @@ import bs4
 import logging
 import traceback
 import docx
+import os
 # this should get 3 atricles from 3 different site and send it to nevet vie gmail.
 # FIXME: when the project is operetional i should addfilename='log.txt' to the logging.basicConfig line
 logging.basicConfig(level=logging.INFO,
@@ -58,6 +59,11 @@ def parsemarker(pagereq):
          newlist.append(i.getText())
     markercontent = ''.join(newlist[3:])
     return (markertitle, markerauthor, markertime, markerunder, markercontent)
+
+    def writefile(fileobject, content):
+        for i in content:
+            fileobject.write(i)
+            return 'Done.'
 
 logging.debug('Start of program')
 run = True
@@ -197,10 +203,12 @@ while run:
             markersecondcontent = 'error in markersecond. check log.'
             markerthirdcontent = 'error in markerthird. check log.'
             logging.error(traceback.format_exc())
-        exit() # this one to be eliminated on the windows version
 # TODO: make it one .doc file
-        open()
-
+        doc = open(os.getcwd() + '\docs\File_%d/%d/%d.txt' % (now.day, now.month, now.year, 'w')
+        writefile(doc, davarfirstcontent)
+        writefile(doc, davarsecondcontent)
+        writefile(doc, davarthirdcontent)
+        exit() # to be eliminated when working on the mailing
 # TODO: send it to the kindle
 
         time.sleep(60) # this makes sure it runs once a day
