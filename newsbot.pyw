@@ -1,4 +1,3 @@
-#!/usr/bin/env python3
 import time
 import datetime
 import requests
@@ -200,7 +199,7 @@ while run:
             logging.error(traceback.format_exc())
         exit() # this one to be eliminated on the windows version
 # TODO: make it one .doc file
-
+        open()
 
 # TODO: send it to the kindle
 
