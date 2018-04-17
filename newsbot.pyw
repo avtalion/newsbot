@@ -172,16 +172,32 @@ while run:
 
             # TODO: parse it so it takes the first 3 articles head and content
             # marker first:
-            markercontent = parsemarker(markerfirst)
-            logging.info('markerfirst title: ' + markercontent[0])
-            logging.info('markerfirst author: ' + markercontent[1])
-            logging.info('markerfirst time: ' + markercontent[2])
-            logging.info('markerfirst under: ' + markercontent[3])
-            logging.info('markerfirst text: ' + markercontent[4][:50])
+            markerfirstcontent = parsemarker(markerfirst)
+            logging.info('markerfirst title: ' + markerfirstcontent[0])
+            logging.info('markerfirst author: ' + markerfirstcontent[1])
+            logging.info('markerfirst time: ' + markerfirstcontent[2])
+            logging.info('markerfirst under: ' + markerfirstcontent[3][:50])
+            logging.info('markerfirst text: ' + markerfirstcontent[4][:50])
+            # marker second:
+            markersecondcontent = parsemarker(markersecond)
+            logging.info('markersecond title: ' + markersecondcontent[0])
+            logging.info('markersecond author: ' + markersecondcontent[1])
+            logging.info('markersecond time: ' + markersecondcontent[2])
+            logging.info('markersecond under: ' + markersecondcontent[3][:50])
+            logging.info('markersecond text: ' + markersecondcontent[4][:50])
+            # marker third:
+            markerthirdcontent = parsemarker(markerthird)
+            logging.info('markerthird title: ' + markerthirdcontent[0])
+            logging.info('markerthird author: ' + markerthirdcontent[1])
+            logging.info('markerthird time: ' + markerthirdcontent[2])
+            logging.info('markerthird under: ' + markerthirdcontent[3][:50])
+            logging.info('markerthird text: ' + markerthirdcontent[4][:50])
 
         except:
             logging.error(traceback.format_exc())
-            marker = 'נמנעה הגישה לדה מרקר'
+            markerfirstcontent = 'error in markerfirst. check log.'
+            markersecondcontent = 'error in markersecond. check log.'
+            markerthirdcontent = 'error in markerthird. check log.'
         exit() # this one to be eliminated on the windows version
 # TODO: make it one .doc file
 
