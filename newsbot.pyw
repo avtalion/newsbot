@@ -1,11 +1,12 @@
 #!/usr/bin/python3
 import time
-import datetime
+from datetime import datetime
 import requests
 import bs4
 import logging
 import traceback
 import docx
+import os
 # this should get 3 atricles from 3 different site and send it to nevet vie gmail.
 # FIXME: when the project is operetional i should addfilename='log.txt' to the logging.basicConfig line
 logging.basicConfig(level=logging.INFO,
@@ -13,13 +14,28 @@ logging.basicConfig(level=logging.INFO,
 # this does everything but front page for davar1
 def parsedavar(pagereq):
     davarsoup = bs4.BeautifulSoup(pagereq.text, 'lxml')
-    # gets headline:
-    davartitle = davarsoup.select('.headline')[0].getText()
+    try:
+        # gets headline:
+        davartitle = davarsoup.select('.headline')[0].getText()
+    except:
+        davartitle = 'No title found'
+        logging.error(traceback.format_exc())
     # gets author:
-    davarauthor = davarsoup.select('.under-headline')[0].getText()
+    try:
+        davarauthor = davarsoup.select('.under-headline')[0].getText()
+    except:
+        davarauthor = 'No author found'
+        logging.error(traceback.format_exc())
     # gets the content:
-    davartext = davarsoup.select('.article-body')[0].getText()
-    return (davartitle, davarauthor, davartext)
+    try:
+        davartext = (davarsoup.select('.article-body > p'))
+        davarcontent = ''
+        for i in davartext:
+            davarcontent = davarcontent + i.getText() + '\n'
+    except:
+        davarcontent = 'No text found'
+        logging.error(traceback.format_exc())
+    return (davartitle, davarauthor, davarcontent)
 
 # TODO: build a parsing func for haaretz. LAST, PROB IMPOSSIBLE.
 def parsehaaretz(pagereq):
@@ -32,39 +48,75 @@ def parsemakor(pagereq):
     pagereq.encoding = 'utf-8'
     makorsoup = bs4.BeautifulSoup(pagereq.text, 'lxml')
     # gets headline:
-    makortitle = makorsoup.select('h1')[0].getText()
+    try:
+        makortitle = makorsoup.select('h1')[0].getText()
+    except:
+        makortitle = 'No title found'
+        logging.error(traceback.format_exc())
     # gets undertitle:
-    makorunder = makorsoup.select('.jeg_post_subtitle')[0].getText()
+    try:
+        makorunder = makorsoup.select('.jeg_post_subtitle')[0].getText()
+    except:
+        makorunder = 'No under found'
+        logging.error(traceback.format_exc())
     # gets author and date:
-    makorauthor = makorsoup.select('.jeg_meta_author')[0].getText()
+    try:
+        makorauthor = makorsoup.select('.jeg_meta_author')[0].getText()
+    except:
+        makorauthor = 'No author found'
+        logging.error(traceback.format_exc())
     #gets the content:
-    makorcontent = makorsoup.select('.content-inner')[0].getText()
+    try:
+        makorcontent = makorsoup.select('.content-inner')[0].getText()
+    except:
+        makorcontent = 'No content found'
+        loggin.error(traceback.format_exc())
     return (makortitle, makorunder, makorauthor, makorcontent)
 
 # TODO: build a parsing func for the themarker
-def parsemarker(pagereq):
+def parsemarker(pagereq):  # FIXME: something doesn't work here
     markersoup = bs4.BeautifulSoup(pagereq.text, 'lxml')
     # gets the headline:
-    markertitle = markersoup.select('h1')[0].getText()
+    try:
+        markertitle = markersoup.select('h1')[0].getText()
+    except:
+        markertitle = 'No title found'
+        logging.error(traceback.format_exc())
     # gets the description:
-    markerunder = markersoup.select('p.t-delta')[0].getText()
+    try:
+        markerunder = markersoup.select('p.t-delta')[0].getText()
+    except:
+        markerunder = 'No under found'
+        logging.error(traceback.format_exc())
     # gets author
-    markerauthor = markersoup.select('a.js-stat-util-info')[0].get('data-statutil-writer')
+    try:
+        markerauthor = markersoup.select('a.js-stat-util-info')[0].get('data-statutil-writer')
+    except:
+        markerauthor = 'No author found'
+        logging.error(traceback.format_exc())
     # gets the time
-    markertime = markersoup.select('time')[0].get('datetime')
+    try:
+        markertime = markersoup.select('time')[0].get('datetime')
+    except:
+        markertime = 'No timestamp found'
+        logging.error(traceback.format_exc())
     # gets all the paragraphs
-    markercontent = ''
-    contentlist = markersoup.select('.t-body-text')
-    for i in contentlist: # FIXME: prob can be much shorter using .join!
-        if contentlist.index(i) >= 3:
-            markercontent = markercontent + i.getText()
+    try:
+        markercontent = ''
+        contentlist = markersoup.select('.t-body-text')
+        for i in contentlist:
+            if contentlist.index(i) >= 3:
+                markercontent = markercontent + i.getText()
+    except:
+        markercontent = 'No content found'
+        logging.error(traceback.format_exc())
     return (markertitle, markerauthor, markertime, markerunder, markercontent)
 
 logging.debug('Start of program')
 run = True
-while run:
-    now = datetime.datetime.now()
-    if True:  # now.hour == 7 and now.minute == 0: runs the code at seven
+while run: # program Start
+    now = datetime.now()
+    if True:  # TODO: uncomment this when ready: now.hour == 7 and now.minute == 0:
         logging.debug('its %s and the script runs' % now)
 # takes the page from davar rishon.
         try:
@@ -85,9 +137,9 @@ while run:
             davarthird = requests.get(davarlinks[3].get('href'))
             davarthird.raise_for_status()
 
-            logging.info('First article: %s' % davarlinks[0].get('href'))
-            logging.info('Second article: %s' % davarlinks[1].get('href'))
-            logging.info('Third article: %s' % davarlinks[3].get('href'))
+            logging.info('davarfirst address:: %s' % davarlinks[0].get('href'))
+            logging.info('davarsecond address:: %s' % davarlinks[1].get('href'))
+            logging.info('davarthird address:: %s' % davarlinks[3].get('href'))
 
             davarfirstcontent = parsedavar(davarfirst) # parse davarfirst:
             logging.info('Davarfirst title: ' + davarfirstcontent[0])
@@ -129,7 +181,7 @@ while run:
             makorthird = requests.get(makorlinks[2].get('href'))
             makorthird.raise_for_status()
 
-            logging.info('Makorfirst adress: ' + makorlinks[0].get('href'))
+            logging.info('Makorfirst address: ' + makorlinks[0].get('href'))
             logging.info('Makorsecond address: ' + makorlinks[1].get('href'))
             logging.info('Makorthird address: ' + makorlinks[2].get('href'))
 
@@ -198,14 +250,20 @@ while run:
             markerfirstcontent = 'error in markerfirst. check log.'
             markersecondcontent = 'error in markersecond. check log.'
             markerthirdcontent = 'error in markerthird. check log.'
-        exit() # this one to be eliminated on the windows version
-# TODO: make it one .doc file
+# TODO: make it one .txt file
+        os.chdir('./docs')
+        doc = open('news_%d-%d-%d.txt' % (now.day, now.month, now.year), 'w')
+        doc.write(''.join(davarfirstcontent))
+        logging.info('Wrote davarfirst to file.')
+
+        doc.close() # this closes the file.
 
 # TODO: send it to the kindle
+        exit() # this one to be eliminated
 
         time.sleep(60) # this makes sure it runs once a day
-
+        # TODO: write a script that deletes the
 # QUESTION figure out whether you want the program to end?
     if now.year == 2019:
         run = False
-# QUESTION send an aboortion email when the loop stops?
+# QUESTION send an abortion email when the loop stops?
