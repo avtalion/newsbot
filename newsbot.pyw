@@ -112,6 +112,7 @@ def parsemarker(pagereq):  # FIXME: something doesn't work here
 
 
 logging.debug('Start of program')
+os.chdir('./docs')
 run = True
 while run:  # program Start
     now = datetime.now()
@@ -250,10 +251,21 @@ while run:  # program Start
             markersecondcontent = 'error in markersecond. check log.'
             markerthirdcontent = 'error in markerthird. check log.'
 # TODO: make it one .txt file
-        os.chdir('./docs')
         doc = open('news_%d-%d-%d.txt' % (now.day, now.month, now.year), 'w')
+        # writing davar1 to file
+        doc.write('דבר ראשון:\n')
         doc.write(''.join(davar_first_content))
         logging.info('Wrote davarfirst to file.')
+        doc.write(''.join(davar_second_content))
+        logging.info('Wrote davarsecond to file')
+        doc.write(''.join(davar_third_content))
+        logging.info('Wrote davarthird to file')
+        # TODO: write makor1 to file
+        doc.write('מקור ראשון:\n')
+        doc.write(''.join(makorfirstcontent))
+        logging.info('Wrote makorfirst to file')
+        # TODO: write demarker
+        doc.write('דה מרקר:\n')
 
         doc.close()  # this closes the file.
 
